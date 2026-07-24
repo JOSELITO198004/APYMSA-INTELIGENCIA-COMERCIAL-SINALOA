@@ -3,9 +3,6 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Inteligencia Comercial APYMSA 2.0</title>
 <meta content="Inteligencia Comercial APYMSA 2.0" property="og:title"/>
@@ -278,7 +275,10 @@
 /* V8.8 · Fuente estricta del catálogo:
    precio = Productos.precio_solicitado
    nombre promo = Productos.comentario */
-</style></head>
+</style><style id="apymsa-layout-simetrico-v1">
+header>div.max-w-7xl{max-width:1600px!important;width:100%!important;display:grid!important;grid-template-columns:minmax(280px,1fr) minmax(560px,2fr)!important;gap:18px!important;align-items:center!important}header>div.max-w-7xl>div:last-child{display:grid!important;grid-template-columns:repeat(5,minmax(145px,1fr))!important;gap:12px!important;width:100%!important}header>div.max-w-7xl>div:last-child>button{width:100%!important;min-height:48px!important;justify-content:center!important;text-align:center!important;padding:10px 14px!important;white-space:nowrap!important}#client-view .mb-8.border-b>div:first-child{align-items:stretch!important}#client-view .mb-8.border-b>div:first-child>div:last-child{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;width:100%!important;max-width:980px!important;margin-left:auto!important}#client-view .mb-8.border-b>div:first-child>div:last-child button{width:100%!important;min-width:0!important;min-height:62px!important;padding:10px 12px!important;white-space:normal!important;line-height:1.15!important}@media(max-width:1200px){header>div.max-w-7xl{grid-template-columns:1fr!important}header>div.max-w-7xl>div:last-child{grid-template-columns:repeat(3,minmax(150px,1fr))!important}#client-view .mb-8.border-b>div:first-child{flex-direction:column!important;align-items:stretch!important}#client-view .mb-8.border-b>div:first-child>div:last-child{max-width:none!important;margin:0!important}}@media(max-width:760px){header>div.max-w-7xl>div:last-child{grid-template-columns:repeat(2,minmax(0,1fr))!important}header>div.max-w-7xl>div:last-child>button{min-height:46px!important;white-space:normal!important}#client-view .mb-8.border-b>div:first-child>div:last-child{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:460px){header>div.max-w-7xl>div:last-child,#client-view .mb-8.border-b>div:first-child>div:last-child{grid-template-columns:1fr!important}}
+</style>
+</head>
 <body>
 <header class="no-print bg-glass border-b border-neon-cyan sticky top-0 z-50">
 <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 p-4">
@@ -288,7 +288,7 @@
 </div>
 <div>
 <h1 class="text-xl font-black italic tracking-tighter uppercase leading-none text-white">
-                    Inteligencia <span class="text-neon-cyan">Comercial V19.8</span>
+                    Inteligencia <span class="text-neon-cyan">Comercial V19.9</span>
 </h1>
 <p class="text-[9px] text-neon-cyan font-bold uppercase tracking-[0.2em] mt-1 opacity-80" id="header-date-text">
                     Calculando mes... • Radiografía comercial
@@ -329,7 +329,7 @@
 <div class="w-10 h-10 border-4 border-[#00f3ff]/20 border-t-[#00f3ff] rounded-full animate-spin mb-3"></div>
 <span class="text-xs font-bold text-neon-cyan uppercase tracking-widest animate-pulse" id="loader-text">Procesando Base de Datos Estructurada...</span>
 </div>
-<h2 class="text-3xl font-black text-white mb-2 tracking-tight">INTELIGENCIA COMERCIAL <span class="text-neon-cyan">V19.8</span></h2>
+<h2 class="text-3xl font-black text-white mb-2 tracking-tight">INTELIGENCIA COMERCIAL <span class="text-neon-cyan">V19.9</span></h2>
 <p class="text-slate-400 mb-8 text-sm font-medium">Selecciona cualquier archivo desde Android o computadora. La aplicación validará internamente que sea GZIP.</p>
 <div class="flex flex-col md:flex-row gap-4 justify-center relative z-10">
 <button class="bg-gradient-to-r from-[#ff004c] to-[#cc003d] text-white px-8 py-3.5 rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg hover:scale-105 transition-transform" id="btnSelectFile" type="button">Archivo Local (JSON.GZ)</button>
@@ -439,6 +439,7 @@
 </div>
 <div class="p-4 flex flex-col md:flex-row gap-3 border-b border-slate-200 bg-slate-50">
 <input class="flex-1 bg-white border border-slate-300 text-slate-900 rounded-xl px-4 py-3 text-[10px] font-bold outline-none focus:border-blue-500" id="no-visit-search" oninput="renderNoVisitRows()" placeholder="Buscar cliente, razón social, asesor, región o sucursal..." type="text"/>
+<button class="bg-[#107c41] hover:bg-[#0b6a36] text-white rounded-xl px-5 py-3 text-[10px] font-black uppercase whitespace-nowrap shadow-lg" onclick="exportNoVisitExcel()">Descargar Excel</button>
 <div class="bg-red-50 border border-red-200 text-red-800 rounded-xl px-4 py-3 text-[10px] font-black uppercase" id="no-visit-count"></div>
 </div>
 <div class="overflow-auto flex-1">
@@ -711,8 +712,6 @@
     function calcularDiasTranscurridos() {
         let diasAcumulados = 0;
         let hoy = new Date();
-        // Excluye siempre el día de visualización. Solo considera los días
-        // efectivos completamente transcurridos hasta ayer.
         for (let d = 1; d < hoy.getDate(); d++) {
             let fechaIterada = new Date(hoy.getFullYear(), hoy.getMonth(), d);
             let diaSemana = fechaIterada.getDay();
@@ -1147,6 +1146,9 @@
     }
     
     function renderNoVisitRows(){const q=String(document.getElementById('no-visit-search').value||'').toLowerCase().trim(),money=new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});const rows=noVisitRowsCache.filter(x=>`${x.c.id} ${x.c.name} ${x.c.advisor} ${x.c.regional} ${x.sucursal}`.toLowerCase().includes(q));document.getElementById('no-visit-count').innerText=rows.length+' CLIENTES NO VISITADOS';document.getElementById('no-visit-rows').innerHTML=rows.map(x=>`<tr><td><b>${x.c.id}</b></td><td>${x.c.name}</td><td>${x.c.advisor}</td><td><b class="text-red-700">${money.format(x.deficit)}</b></td><td>${x.c.regional}</td><td>${x.sucursal}</td></tr>`).join('')||'<tr><td colspan="6" class="text-center font-black">Sin coincidencias</td></tr>'}
+
+    function getFilteredNoVisitRows(){const q=String(document.getElementById('no-visit-search').value||'').toLowerCase().trim();return noVisitRowsCache.filter(x=>`${x.c.id} ${x.c.name} ${x.c.advisor} ${x.c.regional} ${x.sucursal}`.toLowerCase().includes(q))}
+    function exportNoVisitExcel(){const rows=getFilteredNoVisitRows();if(!rows.length){showAlert('NO HAY CLIENTES NO VISITADOS PARA EXPORTAR');return}const data=rows.map(x=>({'cliente_id':x.c.id,'razón_social':x.c.name,'asesor':x.c.advisor,'déficit venta 2026 vs cuota 2026':x.deficit,'gerente_regional':x.c.regional,'sucursal_vendedor':x.sucursal}));const ws=XLSX.utils.json_to_sheet(data);ws['!cols']=[{wch:16},{wch:42},{wch:28},{wch:28},{wch:30},{wch:26}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Clientes no visitados');XLSX.writeFile(wb,`clientes_no_visitados_${MESES_NOMBRES[CURRENT_MONTH]}_${CURRENT_YEAR}.xlsx`)}
 
     function regionalClients(){return currentSelectedRegional?Array.from(currentSelectedRegional.asesores.values()).flatMap(a=>Array.from(a.clientes.values())):[]}function switchRegionalTab(tab){['intel','discipline'].forEach(n=>document.getElementById('regional-'+n).classList.toggle('hidden',n!==tab));document.getElementById('regional-advisors-list').classList.toggle('hidden',tab!=='advisors');if(tab==='intel')renderIntel(regionalClients(),'regional');if(tab==='discipline')renderDiscipline(regionalClients(),'regional')}
     function detailSummaryCard(label,value,color,caption){return`<div class="bg-black/50 border rounded-2xl p-4" style="border-color:${color}"><span class="text-[8px] text-slate-400 font-black uppercase">${label}</span><b class="block text-xl mt-2" style="color:${color}">${value}</b><small class="text-[8px] text-slate-500 font-bold uppercase">${caption||''}</small></div>`}
